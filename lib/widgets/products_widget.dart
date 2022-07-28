@@ -72,7 +72,7 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                     TextWidget(
                       text: "\$1.99",
                       color: color,
-                      textSize: 10.0,
+                      textSize: 18.0,
                     ),
                     const SizedBox(
                       width: 7.0,
