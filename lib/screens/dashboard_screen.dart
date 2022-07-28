@@ -7,6 +7,7 @@ import '../consts/constants.dart';
 import '../controllers/menu_controller.dart';
 import '../widgets/grid_product.dart';
 import '../widgets/header.dart';
+import '../widgets/orders_list.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -46,6 +47,7 @@ class DashboardScreen extends StatelessWidget {
                           childAspectRatio: size.width < 1400 ? 0.8 : 1.05,
                         ),
                       ),
+                      OrdersList(),
                     ],
                   ),
                 ),
