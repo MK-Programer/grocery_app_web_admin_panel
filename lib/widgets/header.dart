@@ -8,8 +8,9 @@ class Header extends StatelessWidget {
   const Header({
     Key? key,
     required this.fct,
+    required this.title,
   }) : super(key: key);
-
+  final String title;
   final Function fct;
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class Header extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Dashboard",
+              title,
               style: Theme.of(context).textTheme.headline6,
             ),
           ),

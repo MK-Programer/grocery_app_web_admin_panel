@@ -46,6 +46,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                       fct: () {
                         context.read<MenuController>().controlProductsMenu();
                       },
+                      title: 'All products',
                     ),
                     Responsive(
                       mobile: ProductGrid(
