@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app_web_admin_panel/responsive.dart';
 import 'package:grocery_app_web_admin_panel/services/utils.dart';
-import 'package:grocery_app_web_admin_panel/widgets/products_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../consts/constants.dart';
