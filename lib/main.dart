@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'consts/theme_data.dart';
-import 'controllers/MenuController.dart';
+import 'controllers/menu_controller.dart';
 import 'providers/dark_theme_provider.dart';
 import 'screens/main_screen.dart';
 
