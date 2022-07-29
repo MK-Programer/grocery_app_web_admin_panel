@@ -5,10 +5,14 @@ class MenuController extends ChangeNotifier {
   final GlobalKey<ScaffoldState> _gridScaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<ScaffoldState> _addProductScaffoldKey =
       GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _ordersScaffoldKey =
+      GlobalKey<ScaffoldState>();
   // Getters
   GlobalKey<ScaffoldState> get getScaffoldKey => _scaffoldKey;
   GlobalKey<ScaffoldState> get getgridscaffoldKey => _gridScaffoldKey;
-  GlobalKey<ScaffoldState> get getAddProductscaffoldKey => _addProductScaffoldKey;
+  GlobalKey<ScaffoldState> get getAddProductscaffoldKey =>
+      _addProductScaffoldKey;
+  GlobalKey<ScaffoldState> get getOrderscaffoldKey => _ordersScaffoldKey;
 
   // Callbacks
   void controlDashboarkMenu() {
@@ -26,6 +30,12 @@ class MenuController extends ChangeNotifier {
   void controlAddProductsMenu() {
     if (!_addProductScaffoldKey.currentState!.isDrawerOpen) {
       _addProductScaffoldKey.currentState!.openDrawer();
+    }
+  }
+
+  void controlOrdersMenu() {
+    if (!_ordersScaffoldKey.currentState!.isDrawerOpen) {
+      _ordersScaffoldKey.currentState!.openDrawer();
     }
   }
 }

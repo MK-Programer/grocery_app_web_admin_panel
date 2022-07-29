@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app_web_admin_panel/widgets/orders_list.dart';
 import 'package:provider/provider.dart';
 
 import '../consts/constants.dart';
@@ -9,20 +10,20 @@ import '../widgets/grid_product.dart';
 import '../widgets/header.dart';
 import '../widgets/side_menu.dart';
 
-class AllProductsScreen extends StatefulWidget {
-  const AllProductsScreen({Key? key}) : super(key: key);
+class AllOrdersScreen extends StatefulWidget {
+  const AllOrdersScreen({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _AllProductsScreenState createState() => _AllProductsScreenState();
+  _AllOrdersScreenState createState() => _AllOrdersScreenState();
 }
 
-class _AllProductsScreenState extends State<AllProductsScreen> {
+class _AllOrdersScreenState extends State<AllOrdersScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = Utils(context).getScreenSize;
     return Scaffold(
-      key: context.read<MenuController>().getgridscaffoldKey,
+      key: context.read<MenuController>().getOrderscaffoldKey,
       drawer: const SideMenu(),
       body: SafeArea(
         child: Row(
@@ -35,6 +36,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                 // and it takes 1/6 part of the screen
                 child: SideMenu(),
               ),
+
             Expanded(
               // It takes 5/6 part of the screen
               flex: 5,
@@ -45,22 +47,16 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                   children: [
                     Header(
                       fct: () {
-                        context.read<MenuController>().controlProductsMenu();
+                        context.read<MenuController>().controlOrdersMenu();
                       },
-                      title: 'All products',
+                      title: 'All orders',
                     ),
-                    Responsive(
-                      mobile: ProductGrid(
-                        crossAxisCount: size.width < 650 ? 2 : 4,
-                        childAspectRatio:
-                            size.width < 650 && size.width > 350 ? 1.1 : 0.8,
-                        isInMain: false,
-                      ),
-                      desktop: ProductGrid(
-                        crossAxisCount: 4,
-                        childAspectRatio: size.width < 1400 ? 0.8 : 1.05,
-                        isInMain: false,
-                      ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: OrdersList(),
                     ),
                   ],
                 ),

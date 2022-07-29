@@ -49,7 +49,10 @@ class DashboardScreen extends StatelessWidget {
                           childAspectRatio: size.width < 1400 ? 0.8 : 1.05,
                         ),
                       ),
-                      OrdersList(),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: OrdersList(),
+                      ),
                     ],
                   ),
                 ),
