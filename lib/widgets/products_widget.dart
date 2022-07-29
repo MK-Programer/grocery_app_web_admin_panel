@@ -30,7 +30,7 @@ class _ProductsWidgetState extends State<ProductsWidget> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Flexible(
                       flex: 3,

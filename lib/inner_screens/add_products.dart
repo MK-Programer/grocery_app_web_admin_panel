@@ -86,6 +86,7 @@ class _UploadProductFormState extends State<UploadProductForm> {
                         context.read<MenuController>().controlAddProductsMenu();
                       },
                       title: 'Add Product',
+                      showTextField: false,
                     ),
                   ),
                   const SizedBox(
