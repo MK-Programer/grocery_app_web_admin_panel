@@ -1,4 +1,8 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grocery_app_web_admin_panel/responsive.dart';
@@ -7,6 +11,7 @@ import 'package:grocery_app_web_admin_panel/widgets/buttons.dart';
 import 'package:grocery_app_web_admin_panel/widgets/side_menu.dart';
 import 'package:grocery_app_web_admin_panel/widgets/text_widget.dart';
 import 'package:iconly/iconly.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../controllers/menu_controller.dart';
@@ -27,6 +32,8 @@ class _UploadProductFormState extends State<UploadProductForm> {
   String _catValue = "Vegetables";
   int _groupValue = 1;
   bool _isPiece = false;
+  File? _pickedImage;
+  Uint8List webImage = Uint8List(8);
   @override
   void initState() {
     _titleController = TextEditingController();
@@ -234,9 +241,19 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                       color: _scaffoldColor,
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
-                                    child: dottedBorder(
-                                      color: color,
-                                    ),
+                                    child: _pickedImage == null
+                                        ? dottedBorder(
+                                            color: color,
+                                          )
+                                        : kIsWeb
+                                            ? Image.memory(
+                                                webImage,
+                                                fit: BoxFit.fill,
+                                              )
+                                            : Image.file(
+                                                _pickedImage!,
+                                                fit: BoxFit.fill,
+                                              ),
                                   ),
                                 ),
                               ),
@@ -298,6 +315,44 @@ class _UploadProductFormState extends State<UploadProductForm> {
     );
   }
 
+  Future<void> _pickImage() async {
+    //! OPEN FROM A MOBILE PHONE
+    if (!kIsWeb) {
+      final ImagePicker picker = ImagePicker();
+      XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        var selected = File(image.path);
+        setState(
+          () {
+            _pickedImage = selected;
+          },
+        );
+      } else {
+        print("No image has been picked");
+      }
+    }
+    //! WEB CASE
+    else if (kIsWeb) {
+      final ImagePicker picker = ImagePicker();
+      XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        var f = await image.readAsBytes();
+        setState(
+          () {
+            webImage = f;
+            _pickedImage = File("a");
+          },
+        );
+      } else {
+        print("No image has been picked");
+      }
+    }
+    //! EITHER MOBILE NOR WEB
+    else {
+      print("Something went wrong");
+    }
+  }
+
   Widget dottedBorder({required Color color}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -319,7 +374,9 @@ class _UploadProductFormState extends State<UploadProductForm> {
                 height: 20.0,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  _pickImage();
+                },
                 child: TextWidget(
                   text: "Choose an image",
                   color: Colors.blue,
