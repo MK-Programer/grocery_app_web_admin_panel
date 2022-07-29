@@ -24,6 +24,8 @@ class _UploadProductFormState extends State<UploadProductForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _titleController, _priceController;
   String _catValue = "Vegetables";
+  int _groupValue = 1;
+  bool _isPiece = false;
   @override
   void initState() {
     _titleController = TextEditingController();
@@ -169,7 +171,6 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                         isTitle: true,
                                       ),
                                       const SizedBox(height: 10.0),
-                                      // ToDo: Implement the combobox
                                       _categoryDropDown(),
                                       const SizedBox(height: 20.0),
                                       TextWidget(
@@ -178,7 +179,44 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                         isTitle: true,
                                       ),
                                       const SizedBox(height: 10.0),
-                                      // ToDo: Implement the radio buttons
+                                      Row(
+                                        children: [
+                                          TextWidget(
+                                            text: "KG",
+                                            color: color,
+                                          ),
+                                          Radio(
+                                            value: 1,
+                                            groupValue: _groupValue,
+                                            onChanged: (value) {
+                                              setState(
+                                                () {
+                                                  _groupValue = 1;
+                                                  _isPiece = false;
+                                                },
+                                              );
+                                            },
+                                            activeColor: Colors.green,
+                                          ),
+                                          TextWidget(
+                                            text: "Piece",
+                                            color: color,
+                                          ),
+                                          Radio(
+                                            value: 2,
+                                            groupValue: _groupValue,
+                                            onChanged: (value) {
+                                              setState(
+                                                () {
+                                                  _groupValue = 2;
+                                                  _isPiece = true;
+                                                },
+                                              );
+                                            },
+                                            activeColor: Colors.green,
+                                          )
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),
