@@ -12,7 +12,7 @@ import '../controllers/menu_controller.dart';
 import '../widgets/header.dart';
 
 class UploadProductForm extends StatefulWidget {
-  static const routeName = "/UploadProductForm";
+  // static const routeName = "/UploadProductForm";
   const UploadProductForm({Key? key}) : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class UploadProductForm extends StatefulWidget {
 class _UploadProductFormState extends State<UploadProductForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _titleController, _priceController;
-
+  String _catValue = "Vegetables";
   @override
   void initState() {
     _titleController = TextEditingController();
@@ -170,6 +170,7 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       // ToDo: Implement the combobox
+                                      _categoryDropDown(),
                                       const SizedBox(height: 20.0),
                                       TextWidget(
                                         text: "Measuring unit",
@@ -243,6 +244,62 @@ class _UploadProductFormState extends State<UploadProductForm> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _categoryDropDown() {
+    final color = Utils(context).color;
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 18.0,
+              color: color,
+            ),
+            value: _catValue,
+            onChanged: (value) {
+              setState(
+                () {
+                  _catValue = value!;
+                },
+              );
+
+              print(_catValue);
+            },
+            hint: const Text("Select a category"),
+            items: const [
+              DropdownMenuItem(
+                value: "Vegetables",
+                child: Text("Vegetables"),
+              ),
+              DropdownMenuItem(
+                value: "Fruits",
+                child: Text("Fruits"),
+              ),
+              DropdownMenuItem(
+                value: "Grains",
+                child: Text("Grains"),
+              ),
+              DropdownMenuItem(
+                value: "Nuts",
+                child: Text("Nuts"),
+              ),
+              DropdownMenuItem(
+                value: "Herbs",
+                child: Text("Herbs"),
+              ),
+              DropdownMenuItem(
+                value: "Spices",
+                child: Text("Spices"),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

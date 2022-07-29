@@ -52,10 +52,6 @@ class _MyAppState extends State<MyApp> {
             title: 'Grocery Panel',
             theme: Styles.themeData(themeProvider.getDarkTheme, context),
             home: const MainScreen(),
-            routes: {
-              UploadProductForm.routeName: (context) =>
-                  const UploadProductForm(),
-            },
           );
         },
       ),
