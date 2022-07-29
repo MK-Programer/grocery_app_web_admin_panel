@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app_web_admin_panel/inner_screens/add_products.dart';
 import 'package:provider/provider.dart';
 
 import 'consts/theme_data.dart';
@@ -51,6 +52,10 @@ class _MyAppState extends State<MyApp> {
             title: 'Grocery Panel',
             theme: Styles.themeData(themeProvider.getDarkTheme, context),
             home: const MainScreen(),
+            routes: {
+              UploadProductForm.routeName: (context) =>
+                  const UploadProductForm(),
+            },
           );
         },
       ),
