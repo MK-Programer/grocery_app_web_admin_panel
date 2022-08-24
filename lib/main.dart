@@ -1,13 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery_app_web_admin_panel/inner_screens/add_products.dart';
 import 'package:provider/provider.dart';
-
 import 'consts/theme_data.dart';
 import 'controllers/menu_controller.dart';
 import 'providers/dark_theme_provider.dart';
 import 'screens/main_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyCUzp_9ylq1ao5bbLbMtpRf20CEcTzDUSQ",
+      appId: "1:49291810820:web:f473b06a33fd7b920e3d51",
+      messagingSenderId: "49291810820",
+      projectId: "grocery---flutter-course-704ed",
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -32,6 +40,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
