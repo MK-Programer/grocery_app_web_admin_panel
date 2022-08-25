@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_app_web_admin_panel/services/utils.dart';
 import 'package:grocery_app_web_admin_panel/widgets/products_widget.dart';
+import 'package:grocery_app_web_admin_panel/widgets/text_widget.dart';
 
 import '../consts/constants.dart';
 
@@ -15,19 +18,53 @@ class ProductGrid extends StatelessWidget {
   final bool isInMain;
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: isInMain ? 4 : 20,
-      itemBuilder: (context, index) {
-        return const ProductsWidget();
+    final Color color = Utils(context).color;
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('products').snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.connectionState == ConnectionState.active) {
+          if (snapshot.data!.docs.isNotEmpty) {
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: isInMain && snapshot.data!.docs.length > 4
+                  ? 4
+                  : snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                return ProductsWidget(
+                  id: snapshot.data!.docs[index]['id'],
+                );
+              },
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                childAspectRatio: childAspectRatio,
+                crossAxisSpacing: defaultPadding,
+                mainAxisSpacing: defaultPadding,
+              ),
+            );
+          } else {
+            return Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: const Center(
+                child: Text('Your store is empty'),
+              ),
+            );
+          }
+        }
+        return const Center(
+          child: Text(
+            'Something went wrong',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30.0,
+            ),
+          ),
+        );
       },
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        childAspectRatio: childAspectRatio,
-        crossAxisSpacing: defaultPadding,
-        mainAxisSpacing: defaultPadding,
-      ),
     );
   }
 }

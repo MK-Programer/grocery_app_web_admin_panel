@@ -1,15 +1,64 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app_web_admin_panel/services/utils.dart';
 import 'package:grocery_app_web_admin_panel/widgets/text_widget.dart';
 
+import '../services/global_method.dart';
+
 class ProductsWidget extends StatefulWidget {
-  const ProductsWidget({Key? key}) : super(key: key);
+  final String id;
+  const ProductsWidget({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   State<ProductsWidget> createState() => _ProductsWidgetState();
 }
 
 class _ProductsWidgetState extends State<ProductsWidget> {
+  bool _isLoading = false;
+  String title = '';
+  String productCat = '';
+  String? imageUrl;
+  String price = '0.0';
+  double salePrice = 0.0;
+  bool isOnSale = false;
+  bool isPiece = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getProductsData();
+  }
+
+  Future<void> getProductsData() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final DocumentSnapshot productDoc = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(widget.id)
+          .get();
+      if (productDoc == null) {
+        return;
+      } else {
+        title = productDoc.get('title');
+        productCat = productDoc.get('productCategoryName');
+        imageUrl = productDoc.get('imageUrl');
+        price = productDoc.get('price');
+        salePrice = productDoc.get('salePrice');
+        isOnSale = productDoc.get('isOnSale');
+        isPiece = productDoc.get('isPiece');
+      }
+    } catch (error) {
+      setState(() => _isLoading = false);
+      GlobalMethods.errorDialog(subTitle: '$error', context: context);
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = Utils(context).getScreenSize;
@@ -35,7 +84,8 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                     Flexible(
                       flex: 3,
                       child: Image.network(
-                        "https://www.lifepng.com/wp-content/uploads/2020/11/Apricot-Large-Single-png-hd.png",
+                        imageUrl ??
+                            "https://www.lifepng.com/wp-content/uploads/2020/11/Apricot-Large-Single-png-hd.png",
                         fit: BoxFit.fill,
                         height: size.width * 0.12,
                       ),
@@ -70,7 +120,9 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                 Row(
                   children: [
                     TextWidget(
-                      text: "\$1.99",
+                      text: isOnSale
+                          ? "\$${salePrice.toStringAsFixed(2)}"
+                          : "\$$price",
                       color: color,
                       textSize: 18.0,
                     ),
@@ -78,9 +130,9 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                       width: 7.0,
                     ),
                     Visibility(
-                      visible: true,
+                      visible: isOnSale,
                       child: Text(
-                        "\$3.89",
+                        "\$$price",
                         style: TextStyle(
                           decoration: TextDecoration.lineThrough,
                           color: color,
@@ -89,7 +141,7 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                     ),
                     const Spacer(),
                     TextWidget(
-                      text: "1Kg",
+                      text: isPiece ? "Piece" : "1Kg",
                       color: color,
                       textSize: 18.0,
                     ),
@@ -99,7 +151,7 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                   height: 2.0,
                 ),
                 TextWidget(
-                  text: "Title",
+                  text: title,
                   color: color,
                   textSize: 24.0,
                   isTitle: true,
