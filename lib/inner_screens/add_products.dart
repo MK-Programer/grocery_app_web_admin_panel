@@ -3,6 +3,8 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+// ignore: deprecated_member_use
+import 'package:firebase/firebase.dart' as fb;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,7 +25,7 @@ import '../services/global_method.dart';
 import '../widgets/header.dart';
 
 class UploadProductForm extends StatefulWidget {
-  // static const routeName = "/UploadProductForm";
+  static const routeName = "/UploadProductForm";
   const UploadProductForm({Key? key}) : super(key: key);
 
   @override
@@ -57,17 +59,28 @@ class _UploadProductFormState extends State<UploadProductForm> {
   void _uploadForm() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
-    setState(() => _isLoading = true);
     if (isValid) {
       _formKey.currentState!.save();
+      if (_pickedImage == null) {
+        GlobalMethods.errorDialog(
+            subTitle: "Please, pick up an image", context: context);
+        return;
+      }
+
       final uuid = const Uuid().v4();
       try {
+        setState(() => _isLoading = true);
+        fb.StorageReference storageRef =
+            fb.storage().ref().child('productsImages').child('${uuid}jpg');
+        final fb.UploadTaskSnapshot uploadTaskSnapshot =
+            await storageRef.put(kIsWeb ? webImage : _pickedImage).future;
+        Uri imageUri = await uploadTaskSnapshot.ref.getDownloadURL();
         await FirebaseFirestore.instance.collection('products').doc(uuid).set({
           'id': uuid,
           'title': _titleController.text,
           'price': _priceController.text,
           'salePrice': 0.1,
-          'imageUrl': '',
+          'imageUrl': imageUri.toString(),
           'productCategoryName': _catValue,
           'isOnSale': false,
           'isPiece': _isPiece,
@@ -84,9 +97,11 @@ class _UploadProductFormState extends State<UploadProductForm> {
         setState(() => _isLoading = false);
         GlobalMethods.errorDialog(
             subTitle: "${error.message}", context: context);
+        print(error.message);
       } catch (error) {
         setState(() => _isLoading = false);
         GlobalMethods.errorDialog(subTitle: "$error", context: context);
+        print(error);
       } finally {
         setState(() => _isLoading = false);
       }
