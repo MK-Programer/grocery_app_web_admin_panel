@@ -166,7 +166,7 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                 TextWidget(
                   text: title,
                   color: color,
-                  textSize: 24.0,
+                  textSize: 20.0,
                   isTitle: true,
                 ),
               ],
