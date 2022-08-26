@@ -17,9 +17,8 @@ class ProductsWidget extends StatefulWidget {
 }
 
 class _ProductsWidgetState extends State<ProductsWidget> {
-  bool _isLoading = false;
-  String title = '';
-  String productCat = '';
+  String title = 'Title';
+  String productCat = 'Product Category';
   String? imageUrl;
   String price = '0.0';
   double salePrice = 0.0;
@@ -33,8 +32,6 @@ class _ProductsWidgetState extends State<ProductsWidget> {
   }
 
   Future<void> getProductsData() async {
-    setState(() => _isLoading = true);
-
     try {
       final DocumentSnapshot productDoc = await FirebaseFirestore.instance
           .collection('products')
@@ -43,19 +40,18 @@ class _ProductsWidgetState extends State<ProductsWidget> {
       if (productDoc == null) {
         return;
       } else {
-        title = productDoc.get('title');
-        productCat = productDoc.get('productCategoryName');
-        imageUrl = productDoc.get('imageUrl');
-        price = productDoc.get('price');
-        salePrice = productDoc.get('salePrice');
-        isOnSale = productDoc.get('isOnSale');
-        isPiece = productDoc.get('isPiece');
+        setState(() {
+          title = productDoc.get('title');
+          productCat = productDoc.get('productCategoryName');
+          imageUrl = productDoc.get('imageUrl');
+          price = productDoc.get('price');
+          salePrice = productDoc.get('salePrice');
+          isOnSale = productDoc.get('isOnSale');
+          isPiece = productDoc.get('isPiece');
+        });
       }
     } catch (error) {
-      setState(() => _isLoading = false);
       GlobalMethods.errorDialog(subTitle: '$error', context: context);
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 

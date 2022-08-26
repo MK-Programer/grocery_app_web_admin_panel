@@ -47,9 +47,9 @@ class ProductGrid extends StatelessWidget {
               ),
             );
           } else {
-            return Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: const Center(
+            return const Padding(
+              padding: EdgeInsets.all(18.0),
+              child: Center(
                 child: Text('Your store is empty'),
               ),
             );
