@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_app_web_admin_panel/inner_screens/edit_products.dart';
 import 'package:grocery_app_web_admin_panel/services/utils.dart';
 import 'package:grocery_app_web_admin_panel/widgets/text_widget.dart';
 
@@ -66,7 +67,23 @@ class _ProductsWidgetState extends State<ProductsWidget> {
         color: Theme.of(context).cardColor.withOpacity(0.6),
         child: InkWell(
           borderRadius: BorderRadius.circular(12.0),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => EditProductScreen(
+                  id: widget.id,
+                  title: title,
+                  price: price,
+                  salePrice: salePrice,
+                  productCat: productCat,
+                  imageUrl: imageUrl ??
+                      "https://www.lifepng.com/wp-content/uploads/2020/11/Apricot-Large-Single-png-hd.png",
+                  isOnSale: isOnSale,
+                  isPiece: isPiece,
+                ),
+              ),
+            );
+          },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

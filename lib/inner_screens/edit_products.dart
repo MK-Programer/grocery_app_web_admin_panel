@@ -12,30 +12,34 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import '../controllers/menu_controller.dart';
 import '../responsive.dart';
 import '../screens/loading_manager.dart';
 import '../services/global_method.dart';
 import '../services/utils.dart';
 import '../widgets/buttons.dart';
+import '../widgets/header.dart';
+import '../widgets/side_menu.dart';
 import '../widgets/text_widget.dart';
 
 class EditProductScreen extends StatefulWidget {
-  const EditProductScreen(
-      {Key? key,
-      required this.id,
-      required this.title,
-      required this.price,
-      required this.salePrice,
-      required this.productCat,
-      required this.imageUrl,
-      required this.isOnSale,
-      required this.isPiece})
-      : super(key: key);
+  const EditProductScreen({
+    Key? key,
+    required this.id,
+    required this.title,
+    required this.price,
+    required this.salePrice,
+    required this.productCat,
+    required this.imageUrl,
+    required this.isOnSale,
+    required this.isPiece,
+  }) : super(key: key);
 
   final String id, title, price, productCat, imageUrl;
   final bool isPiece, isOnSale;
   final double salePrice;
   @override
+  // ignore: library_private_types_in_public_api
   _EditProductScreenState createState() => _EditProductScreenState();
 }
 
@@ -166,299 +170,327 @@ class _EditProductScreenState extends State<EditProductScreen> {
       ),
     );
     return Scaffold(
-      // key: context.read<MenuController>().getEditProductscaffoldKey,
-      // drawer: const SideMenu(),
+      key: context.read<MenuController>().getEditProductScaffoldKey,
+      drawer: const SideMenu(),
       body: LoadingManager(
         isLoading: _isLoading,
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                // Header(
-                //   showTexField: false,
-                //   fct: () {
-                //     context
-                //         .read<MenuController>()
-                //         .controlEditProductsMenu();
-                //   },
-                //   title: 'Edit this product',
-                // ),
-                Container(
-                  width: size.width > 650 ? 650 : size.width,
-                  color: Theme.of(context).cardColor,
-                  padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.all(16),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        TextWidget(
-                          text: 'Product title*',
-                          color: color,
-                          isTitle: true,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          controller: _titleController,
-                          key: const ValueKey('Title'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter a Title';
-                            }
-                            return null;
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (Responsive.isDesktop(context))
+              const Expanded(
+                child: SideMenu(),
+              ),
+            Expanded(
+              flex: 5,
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Header(
+                          fct: () {
+                            context
+                                .read<MenuController>()
+                                .controlEditProductMenu();
                           },
-                          decoration: inputDecoration,
+                          title: 'Edit this product',
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: FittedBox(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    TextWidget(
-                                      text: 'Price in \$*',
-                                      color: color,
-                                      isTitle: true,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    SizedBox(
-                                      width: 100,
-                                      child: TextFormField(
-                                        controller: _priceController,
-                                        key: const ValueKey('Price \$'),
-                                        keyboardType: TextInputType.number,
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return 'Price is missed';
-                                          }
-                                          return null;
-                                        },
-                                        inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp(r'[0-9.]')),
-                                        ],
-                                        decoration: inputDecoration,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    TextWidget(
-                                      text: 'Porduct category*',
-                                      color: color,
-                                      isTitle: true,
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Container(
-                                      color: _scaffoldColor,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8),
-                                        child: catDropDownWidget(color),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    TextWidget(
-                                      text: 'Measure unit*',
-                                      color: color,
-                                      isTitle: true,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        TextWidget(text: 'Kg', color: color),
-                                        Radio(
-                                          value: 1,
-                                          groupValue: val,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              val = 1;
-                                              _isPiece = false;
-                                            });
-                                          },
-                                          activeColor: Colors.green,
-                                        ),
-                                        TextWidget(text: 'Piece', color: color),
-                                        Radio(
-                                          value: 2,
-                                          groupValue: val,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              val = 2;
-                                              _isPiece = true;
-                                            });
-                                          },
-                                          activeColor: Colors.green,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Checkbox(
-                                          value: _isOnSale,
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              _isOnSale = newValue!;
-                                            });
-                                          },
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        TextWidget(
-                                          text: 'Sale',
-                                          color: color,
-                                          isTitle: true,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    AnimatedSwitcher(
-                                      duration: const Duration(seconds: 1),
-                                      child: !_isOnSale
-                                          ? Container()
-                                          : Row(
-                                              children: [
-                                                TextWidget(
-                                                    text: "\$" +
-                                                        _salePrice
-                                                            .toStringAsFixed(2),
-                                                    color: color),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                salePourcentageDropDownWidget(
-                                                    color),
+                      ),
+                      const SizedBox(
+                        height: 25.0,
+                      ),
+                      Container(
+                        width: size.width > 650 ? 650 : size.width,
+                        color: Theme.of(context).cardColor,
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.all(16),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              TextWidget(
+                                text: 'Product title*',
+                                color: color,
+                                isTitle: true,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              TextFormField(
+                                controller: _titleController,
+                                key: const ValueKey('Title'),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter a Title';
+                                  }
+                                  return null;
+                                },
+                                decoration: inputDecoration,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: FittedBox(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          TextWidget(
+                                            text: 'Price in \$*',
+                                            color: color,
+                                            isTitle: true,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          SizedBox(
+                                            width: 100,
+                                            child: TextFormField(
+                                              controller: _priceController,
+                                              key: const ValueKey('Price \$'),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
+                                                  return 'Price is missed';
+                                                }
+                                                return null;
+                                              },
+                                              inputFormatters: <
+                                                  TextInputFormatter>[
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9.]')),
                                               ],
+                                              decoration: inputDecoration,
                                             ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Container(
-                                  height: size.width > 650
-                                      ? 350
-                                      : size.width * 0.45,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                      12,
-                                    ),
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(12)),
-                                    child: _pickedImage == null
-                                        ? Image.network(_imageUrl)
-                                        : (kIsWeb)
-                                            ? Image.memory(
-                                                webImage,
-                                                fit: BoxFit.fill,
-                                              )
-                                            : Image.file(
-                                                _pickedImage!,
-                                                fit: BoxFit.fill,
+                                          ),
+                                          const SizedBox(height: 20),
+                                          TextWidget(
+                                            text: 'Porduct category*',
+                                            color: color,
+                                            isTitle: true,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Container(
+                                            color: _scaffoldColor,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8),
+                                              child: catDropDownWidget(color),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          TextWidget(
+                                            text: 'Measure unit*',
+                                            color: color,
+                                            isTitle: true,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              TextWidget(
+                                                  text: 'Kg', color: color),
+                                              Radio(
+                                                value: 1,
+                                                groupValue: val,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    val = 1;
+                                                    _isPiece = false;
+                                                  });
+                                                },
+                                                activeColor: Colors.green,
                                               ),
+                                              TextWidget(
+                                                  text: 'Piece', color: color),
+                                              Radio(
+                                                value: 2,
+                                                groupValue: val,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    val = 2;
+                                                    _isPiece = true;
+                                                  });
+                                                },
+                                                activeColor: Colors.green,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Checkbox(
+                                                value: _isOnSale,
+                                                onChanged: (newValue) {
+                                                  setState(() {
+                                                    _isOnSale = newValue!;
+                                                  });
+                                                },
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              TextWidget(
+                                                text: 'Sale',
+                                                color: color,
+                                                isTitle: true,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          AnimatedSwitcher(
+                                            duration:
+                                                const Duration(seconds: 1),
+                                            child: !_isOnSale
+                                                ? Container()
+                                                : Row(
+                                                    children: [
+                                                      TextWidget(
+                                                          text: "\$" +
+                                                              _salePrice
+                                                                  .toStringAsFixed(
+                                                                      2),
+                                                          color: color),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      salePourcentageDropDownWidget(
+                                                          color),
+                                                    ],
+                                                  ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                                flex: 1,
-                                child: Column(
-                                  children: [
-                                    FittedBox(
-                                      child: TextButton(
-                                        onPressed: () {
-                                          _pickImage();
-                                        },
-                                        child: TextWidget(
-                                          text: 'Update image',
-                                          color: Colors.blue,
+                                  Expanded(
+                                    flex: 3,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Container(
+                                        height: size.width > 650
+                                            ? 350
+                                            : size.width * 0.45,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(12)),
+                                          child: _pickedImage == null
+                                              ? Image.network(_imageUrl)
+                                              : (kIsWeb)
+                                                  ? Image.memory(
+                                                      webImage,
+                                                      fit: BoxFit.fill,
+                                                    )
+                                                  : Image.file(
+                                                      _pickedImage!,
+                                                      fit: BoxFit.fill,
+                                                    ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                )),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              ButtonsWidget(
-                                onPressed: () async {
-                                  GlobalMethods.warningDialog(
-                                      title: 'Delete?',
-                                      subtitle: 'Press okay to confirm',
-                                      fct: () async {
-                                        await FirebaseFirestore.instance
-                                            .collection('products')
-                                            .doc(widget.id)
-                                            .delete();
-                                        await Fluttertoast.showToast(
-                                          msg: "Product has been deleted",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.CENTER,
-                                          timeInSecForIosWeb: 1,
-                                        );
-                                        while (Navigator.canPop(context)) {
-                                          Navigator.pop(context);
-                                        }
+                                  ),
+                                  Expanded(
+                                      flex: 1,
+                                      child: Column(
+                                        children: [
+                                          FittedBox(
+                                            child: TextButton(
+                                              onPressed: () {
+                                                _pickImage();
+                                              },
+                                              child: TextWidget(
+                                                text: 'Update image',
+                                                color: Colors.blue,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ButtonsWidget(
+                                      onPressed: () async {
+                                        GlobalMethods.warningDialog(
+                                            title: 'Delete?',
+                                            subtitle: 'Press okay to confirm',
+                                            fct: () async {
+                                              await FirebaseFirestore.instance
+                                                  .collection('products')
+                                                  .doc(widget.id)
+                                                  .delete();
+                                              await Fluttertoast.showToast(
+                                                msg: "Product has been deleted",
+                                                toastLength: Toast.LENGTH_LONG,
+                                                gravity: ToastGravity.CENTER,
+                                                timeInSecForIosWeb: 1,
+                                              );
+                                              while (
+                                                  Navigator.canPop(context)) {
+                                                Navigator.pop(context);
+                                              }
+                                            },
+                                            context: context);
                                       },
-                                      context: context);
-                                },
-                                text: 'Delete',
-                                icon: IconlyBold.danger,
-                                backgroundColor: Colors.red.shade700,
-                              ),
-                              ButtonsWidget(
-                                onPressed: () {
-                                  _updateProduct();
-                                },
-                                text: 'Update',
-                                icon: IconlyBold.setting,
-                                backgroundColor: Colors.blue,
-                              ),
+                                      text: 'Delete',
+                                      icon: IconlyBold.danger,
+                                      backgroundColor: Colors.red.shade700,
+                                    ),
+                                    ButtonsWidget(
+                                      onPressed: () {
+                                        _updateProduct();
+                                      },
+                                      text: 'Update',
+                                      icon: IconlyBold.setting,
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
