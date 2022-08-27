@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app_web_admin_panel/services/utils.dart';
 import 'package:grocery_app_web_admin_panel/widgets/products_widget.dart';
-import 'package:grocery_app_web_admin_panel/widgets/text_widget.dart';
 
 import '../consts/constants.dart';
 

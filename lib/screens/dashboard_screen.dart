@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app_web_admin_panel/inner_screens/add_products.dart';
 import 'package:grocery_app_web_admin_panel/responsive.dart';
-import 'package:grocery_app_web_admin_panel/services/global_method.dart';
 import 'package:grocery_app_web_admin_panel/services/utils.dart';
 import 'package:grocery_app_web_admin_panel/widgets/buttons.dart';
 import 'package:grocery_app_web_admin_panel/widgets/text_widget.dart';

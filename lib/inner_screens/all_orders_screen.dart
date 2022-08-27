@@ -6,7 +6,6 @@ import '../consts/constants.dart';
 import '../controllers/menu_controller.dart';
 import '../responsive.dart';
 import '../services/utils.dart';
-import '../widgets/grid_product.dart';
 import '../widgets/header.dart';
 import '../widgets/side_menu.dart';
 
@@ -66,6 +65,5 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
         ),
       ),
     );
-    ;
   }
 }

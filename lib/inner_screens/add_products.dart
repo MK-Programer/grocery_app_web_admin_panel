@@ -124,14 +124,13 @@ class _UploadProductFormState extends State<UploadProductForm> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Utils(context).getTheme;
     final color = Utils(context).color;
-    final _scaffoldColor = Theme.of(context).scaffoldBackgroundColor;
+    final scaffoldColor = Theme.of(context).scaffoldBackgroundColor;
     final Size size = Utils(context).getScreenSize;
 
     var inputDecoration = InputDecoration(
       filled: true,
-      fillColor: _scaffoldColor,
+      fillColor: scaffoldColor,
       border: InputBorder.none,
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
@@ -313,7 +312,7 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                           ? 350
                                           : size.width * 0.5,
                                       decoration: BoxDecoration(
-                                        color: _scaffoldColor,
+                                        color: scaffoldColor,
                                         borderRadius:
                                             BorderRadius.circular(12.0),
                                       ),
