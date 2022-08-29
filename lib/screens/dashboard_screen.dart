@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app_web_admin_panel/inner_screens/add_products.dart';
 import 'package:grocery_app_web_admin_panel/responsive.dart';
@@ -86,9 +87,42 @@ class DashboardScreen extends StatelessWidget {
                           childAspectRatio: size.width < 1400 ? 0.8 : 1.05,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: OrdersList(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('orders')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.active) {
+                              if (snapshot.data!.docs.isNotEmpty) {
+                                return const OrdersList();
+                              } else {
+                                return const Padding(
+                                  padding: EdgeInsets.all(18.0),
+                                  child: Center(
+                                    child: Text('No orders found'),
+                                  ),
+                                );
+                              }
+                            }
+                            return const Center(
+                              child: Text(
+                                'Something went wrong',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30.0,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ],
                   ),
