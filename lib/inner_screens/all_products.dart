@@ -70,6 +70,5 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
         ),
       ),
     );
-    ;
   }
 }

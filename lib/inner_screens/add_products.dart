@@ -199,7 +199,9 @@ class _UploadProductFormState extends State<UploadProductForm> {
                               controller: _titleController,
                               key: const ValueKey("Title"),
                               validator: (value) {
-                                value!.isEmpty ? "Please, enter a title" : null;
+                                return value!.isEmpty
+                                    ? "Please, enter a title"
+                                    : null;
                               },
                               decoration: inputDecoration,
                             ),
@@ -232,7 +234,7 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                             key: const ValueKey("Price \$"),
                                             keyboardType: TextInputType.number,
                                             validator: (value) {
-                                              value!.isEmpty
+                                              return value!.isEmpty
                                                   ? "Price is missed"
                                                   : null;
                                             },

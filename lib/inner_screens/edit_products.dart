@@ -11,15 +11,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import '../controllers/menu_controller.dart';
-import '../responsive.dart';
+
 import '../screens/loading_manager.dart';
 import '../services/global_method.dart';
 import '../services/utils.dart';
 import '../widgets/buttons.dart';
-import '../widgets/header.dart';
-import '../widgets/side_menu.dart';
 import '../widgets/text_widget.dart';
 
 class EditProductScreen extends StatefulWidget {
@@ -155,12 +151,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     final theme = Utils(context).getTheme;
     final color = theme == true ? Colors.white : Colors.black;
-    final _scaffoldColor = Theme.of(context).scaffoldBackgroundColor;
+    final scaffoldColor = Theme.of(context).scaffoldBackgroundColor;
     Size size = Utils(context).getScreenSize;
 
     var inputDecoration = InputDecoration(
       filled: true,
-      fillColor: _scaffoldColor,
+      fillColor: scaffoldColor,
       border: InputBorder.none,
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
@@ -268,7 +264,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                     ),
                                     const SizedBox(height: 10),
                                     Container(
-                                      color: _scaffoldColor,
+                                      color: scaffoldColor,
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8),
@@ -478,28 +474,28 @@ class _EditProductScreenState extends State<EditProductScreen> {
         style: TextStyle(color: color),
         items: const [
           DropdownMenuItem<String>(
-            child: Text('10%'),
             value: '10',
+            child: Text('10%'),
           ),
           DropdownMenuItem<String>(
-            child: Text('15%'),
             value: '15',
+            child: Text('15%'),
           ),
           DropdownMenuItem<String>(
-            child: Text('25%'),
             value: '25',
+            child: Text('25%'),
           ),
           DropdownMenuItem<String>(
-            child: Text('50%'),
             value: '50',
+            child: Text('50%'),
           ),
           DropdownMenuItem<String>(
-            child: Text('75%'),
             value: '75',
+            child: Text('75%'),
           ),
           DropdownMenuItem<String>(
-            child: Text('0%'),
             value: '0',
+            child: Text('0%'),
           ),
         ],
         onChanged: (value) {

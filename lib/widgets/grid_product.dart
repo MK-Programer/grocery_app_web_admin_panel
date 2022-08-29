@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery_app_web_admin_panel/services/utils.dart';
 import 'package:grocery_app_web_admin_panel/widgets/products_widget.dart';
 
 import '../consts/constants.dart';
@@ -17,7 +16,6 @@ class ProductGrid extends StatelessWidget {
   final bool isInMain;
   @override
   Widget build(BuildContext context) {
-    final Color color = Utils(context).color;
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('products').snapshots(),
       builder: (context, snapshot) {

@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../consts/constants.dart';
 import '../controllers/menu_controller.dart';
 import '../responsive.dart';
-import '../services/utils.dart';
 import '../widgets/header.dart';
 import '../widgets/side_menu.dart';
 
@@ -20,7 +19,6 @@ class AllOrdersScreen extends StatefulWidget {
 class _AllOrdersScreenState extends State<AllOrdersScreen> {
   @override
   Widget build(BuildContext context) {
-    final Size size = Utils(context).getScreenSize;
     return Scaffold(
       key: context.read<MenuController>().getOrderscaffoldKey,
       drawer: const SideMenu(),
