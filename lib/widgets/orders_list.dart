@@ -4,7 +4,11 @@ import 'package:grocery_app_web_admin_panel/consts/constants.dart';
 import 'package:grocery_app_web_admin_panel/widgets/orders_widget.dart';
 
 class OrdersList extends StatelessWidget {
-  const OrdersList({Key? key}) : super(key: key);
+  final bool isInDashboard;
+  const OrdersList({
+    Key? key,
+    this.isInDashboard = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +33,24 @@ class OrdersList extends StatelessWidget {
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: snapshot.data!.docs.length,
+                itemCount: isInDashboard && snapshot.data!.docs.length > 5
+                    ? 5
+                    : snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
+                  var currentOrder = snapshot.data!.docs[index];
                   return Column(
-                    children: const [
-                      OrdersWidget(),
-                      Divider(
+                    children: [
+                      OrdersWidget(
+                        price: currentOrder['price'],
+                        totalPrice: currentOrder['totalPrice'],
+                        productId: currentOrder['productId'],
+                        userId: currentOrder['userId'],
+                        imageUrl: currentOrder['imageUrl'],
+                        userName: currentOrder['userName'],
+                        quantity: currentOrder['quantity'],
+                        orderDate: currentOrder['orderDate'],
+                      ),
+                      const Divider(
                         thickness: 3.0,
                       ),
                     ],

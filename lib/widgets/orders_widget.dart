@@ -1,15 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app_web_admin_panel/services/utils.dart';
 import 'package:grocery_app_web_admin_panel/widgets/text_widget.dart';
 
 class OrdersWidget extends StatefulWidget {
-  const OrdersWidget({Key? key}) : super(key: key);
+  final double price, totalPrice;
+  final String productId, userId, imageUrl, userName;
+  final int quantity;
+  final Timestamp orderDate;
+  const OrdersWidget({
+    Key? key,
+    required this.price,
+    required this.totalPrice,
+    required this.productId,
+    required this.userId,
+    required this.imageUrl,
+    required this.userName,
+    required this.quantity,
+    required this.orderDate,
+  }) : super(key: key);
 
   @override
   State<OrdersWidget> createState() => _OrdersWidgetState();
 }
 
 class _OrdersWidgetState extends State<OrdersWidget> {
+  late String orderDateStr;
+  @override
+  void initState() {
+    orderDateStr =
+        '${widget.orderDate.toDate().day}/${widget.orderDate.toDate().month}/${widget.orderDate.toDate().year}';
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = Utils(context).getScreenSize;
@@ -25,7 +48,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
             Flexible(
               flex: size.width < 650 ? 3 : 1,
               child: Image.network(
-                "https://www.lifepng.com/wp-content/uploads/2020/11/Apricot-Large-Single-png-hd.png",
+                widget.imageUrl,
                 fit: BoxFit.fill,
               ),
             ),
@@ -39,7 +62,8 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
-                    text: "12x For \$19.9",
+                    text:
+                        "${widget.quantity}x For \$${widget.price.toStringAsFixed(2)}",
                     color: color,
                     textSize: 16.0,
                     isTitle: true,
@@ -48,13 +72,13 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                     child: Row(
                       children: [
                         TextWidget(
-                          text: "By",
+                          text: "By ",
                           color: Colors.blue,
                           textSize: 16.0,
                           isTitle: true,
                         ),
                         TextWidget(
-                          text: " M. khaled",
+                          text: widget.userName,
                           color: color,
                           textSize: 14.0,
                           isTitle: true,
@@ -62,7 +86,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                       ],
                     ),
                   ),
-                  const Text("29/07/2022"),
+                  Text(orderDateStr),
                 ],
               ),
             )
